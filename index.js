@@ -65,6 +65,7 @@ const testHandler = (req, res) => {
 
     return res.status(429).send()
   }
+  console.log(req)
 
   // if (req.headers['x-github-event'] === 'pull_request') {
   //   // get details
