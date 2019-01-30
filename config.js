@@ -42,11 +42,17 @@ var conf = convict({
     }
   },
   database: {
-    uri: {
+    url: {
       doc: 'Mongo database connection URI',
       format: String,
       default: null,
-      env: 'MONGODB_URI'
+      env: 'MONGODB_URL'
+    },
+    db: {
+      doc: 'Mongo database name',
+      format: String,
+      default: null,
+      env: 'MONGODB_DB'
     },
     reposCollection: {
       doc: 'Name of the collection to be used for storing repositories',

@@ -23,6 +23,9 @@
     "SPARKBOX_API_KEY": {
       "description": "Sparkbox API key"
     },
+    "MONGODB_URI": {
+      "description": "Mongo database connection URI"
+    },
     "COLLECTION_REPOS": {
       "description": "Name of the collection to be used for storing repositories",
       "value": "st_repos"
@@ -35,5 +38,11 @@
       "description": "Minimum interval allowed for scheduled tests (in hours)",
       "value": 12
     }
-  }
+  },
+  "addons": [
+    {
+      "plan": "mongolab:sandbox",
+      "as": "MONGODB"
+    }
+  ]
 }
