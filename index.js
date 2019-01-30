@@ -56,7 +56,7 @@ let db = new Database(connection => {
 
 const testHandler = (req, res) => {
 
-  console.log(req.body)
+  // console.log(req)
   const blockList = config.get('blockList').split(',')
 
   // Abort if user is blocked
@@ -65,6 +65,14 @@ const testHandler = (req, res) => {
 
     return res.status(429).send()
   }
+
+  // if (req.headers['x-github-event'] === 'pull_request') {
+  //   // get details
+  //   const result = github.checks.get({ req.params.user, req.params.repo, req.headers['x-github-delivery']}).then(result => {
+
+  //   })
+  //   console.log(result)
+  // }
 
   const speedtracker = new SpeedTracker({
     db,
