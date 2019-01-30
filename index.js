@@ -67,6 +67,12 @@ const testHandler = (req, res) => {
   }
   console.log(req)
 
+  console.log("logging data.. ")
+  req.on('payload', data => {
+    console.log(data)
+  })
+  console.log("logged...")
+  console.log(res)
   // if (req.headers['x-github-event'] === 'pull_request') {
   //   // get details
   //   const result = github.checks.get({ req.params.user, req.params.repo, req.headers['x-github-delivery']}).then(result => {
@@ -75,25 +81,25 @@ const testHandler = (req, res) => {
   //   console.log(result)
   // }
 
-  const speedtracker = new SpeedTracker({
-    db,
-    branch: req.params.branch,
-    key: req.query.key,
-    remote: github,
-    repo: req.params.repo,
-    scheduler,
-    user: req.params.user
-  })
+  // const speedtracker = new SpeedTracker({
+  //   db,
+  //   branch: req.params.branch,
+  //   key: req.query.key,
+  //   remote: github,
+  //   repo: req.params.repo,
+  //   scheduler,
+  //   user: req.params.user
+  // })
 
-  let profileName = req.params.profile
+  // let profileName = req.params.profile
 
-  speedtracker.runTest(profileName).then(response => {
-    res.send(JSON.stringify(response))
-  }).catch(err => {
-    ErrorHandler.log(err)
+  // speedtracker.runTest(profileName).then(response => {
+  //   res.send(JSON.stringify(response))
+  // }).catch(err => {
+  //   ErrorHandler.log(err)
 
-    res.status(500).send(JSON.stringify(err))
-  })
+  //   res.status(500).send(JSON.stringify(err))
+  // })
 }
 
 server.get('/v1/test/:user/:repo/:branch/:profile', testHandler)
