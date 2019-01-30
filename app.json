@@ -35,11 +35,5 @@
       "description": "Minimum interval allowed for scheduled tests (in hours)",
       "value": 12
     }
-  },
-  "addons": [
-    {
-      "plan": "mongolab:sandbox",
-      "as": "MONGODB"
-    }
-  ]
+  }
 }
