@@ -23,8 +23,11 @@
     "SPARKBOX_API_KEY": {
       "description": "Sparkbox API key"
     },
-    "MONGODB_URI": {
-      "description": "Mongo database connection URI"
+    "MONGODB_URL": {
+      "description": "Mongo database connection URL"
+    },
+    "MONOGDB_DB":{
+      "description": "Mongo database name"
     },
     "COLLECTION_REPOS": {
       "description": "Name of the collection to be used for storing repositories",
