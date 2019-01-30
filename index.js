@@ -56,7 +56,7 @@ let db = new Database(connection => {
 
 const testHandler = (req, res) => {
 
-  console.log(req)
+  console.log(req.body)
   const blockList = config.get('blockList').split(',')
 
   // Abort if user is blocked
