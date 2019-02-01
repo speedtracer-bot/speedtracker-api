@@ -90,6 +90,13 @@ let db = new Database(connection => {
 //   }).catch(console.error)
 // }
 
+const webhooks = new WebhookApi({secret: 'cdfe76a90ece9eb3add341d82ab6479bbf8422b4'})
+console.log(webhooks)
+webhooks.on('*', ({id, name, payload}) => {
+  console.log(name, 'event received')
+  console.log(payload)
+})
+
 const testHandler = (req, res) => {
   // console.log(req)
   const blockList = config.get('blockList').split(',')
@@ -104,12 +111,6 @@ const testHandler = (req, res) => {
 
   github.authenticate(config.get('githubToken'))
 
-  const webhooks = new WebhookApi({secret: 'cdfe76a90ece9eb3add341d82ab6479bbf8422b4'})
-  console.log(webhooks)
-  webhooks.on('*', ({id, name, payload}) => {
-    console.log(name, 'event received')
-    console.log(payload)
-  })
 
   // const speedtracker = new SpeedTracker({
   //   db,
@@ -131,7 +132,7 @@ const testHandler = (req, res) => {
   //   res.status(500).send(JSON.stringify(err))
   // })
   // Stop forwarding events
-  events.close()
+  // events.close()
 }
 
 server.get('/v1/test/:user/:repo/:branch/:profile', testHandler)
