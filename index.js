@@ -11,6 +11,8 @@ const GitHub = require('./lib/GitHub')
 const Scheduler = require('./lib/Scheduler')
 const SpeedTracker = require('./lib/SpeedTracker')
 
+const WebhookApi = require('@octokit/webhooks')
+
 // ------------------------------------
 // Server
 // ------------------------------------
@@ -31,6 +33,8 @@ let scheduler
 
 const github = new GitHub()
 
+// console.log(github)
+//console.log(github.api.issues)
 github.authenticate(config.get('githubToken'))
 
 // ------------------------------------
@@ -55,7 +59,6 @@ let db = new Database(connection => {
 // ------------------------------------
 
 const testHandler = (req, res) => {
-
   // console.log(req)
   const blockList = config.get('blockList').split(',')
 
@@ -65,21 +68,18 @@ const testHandler = (req, res) => {
 
     return res.status(429).send()
   }
-  console.log(req)
+  const github = new GitHub(GitHub.GITHUB_CONNECT)
 
-  console.log("logging data.. ")
-  req.on('payload', data => {
-    console.log(data)
-  })
-  console.log("logged...")
-  console.log(res)
-  // if (req.headers['x-github-event'] === 'pull_request') {
-  //   // get details
-  //   const result = github.checks.get({ req.params.user, req.params.repo, req.headers['x-github-delivery']}).then(result => {
+  const webhooks = new WebhookApi({secret: config.get('githubToken')})
 
-  //   })
-  //   console.log(result)
-  // }
+  github.authenticate(config.get('githubToken'))
+  console.log(req.headers['x-github-event'])
+  if (req.headers['x-github-event'] === 'pull_request') {
+    // get details
+    webhooks.on('pull_request', (id, name, payload) => {
+      console.log(payload)
+    })
+  }
 
   // const speedtracker = new SpeedTracker({
   //   db,
