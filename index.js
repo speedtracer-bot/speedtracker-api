@@ -81,14 +81,16 @@ const testHandler = (req, res) => {
 
   github.authenticate(config.get('githubToken'))
   console.log(req.headers['x-github-event'])
+  eventHandler.on('pull_request', (id, name, payload) => {
+    console.log('recevied pull request')
+    console.log(payload)
+  })
   if (req.headers['x-github-event'] === 'pull_request') {
     // get details
     console.log('entered inside')
     console.log(webhooks)
-    eventHandler.on('pull_request', (id, name, payload) => {
-      console.log('recevied pull request')
-      console.log(payload)
-    })
+    console.log(eventHandler)
+   
   }
 
   // const speedtracker = new SpeedTracker({
