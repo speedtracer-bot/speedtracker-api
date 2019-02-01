@@ -76,6 +76,8 @@ const testHandler = (req, res) => {
   console.log(req.headers['x-github-event'])
   if (req.headers['x-github-event'] === 'pull_request') {
     // get details
+    console.log('entered inside')
+    console.log(webhooks)
     webhooks.on('pull_request', (id, name, payload) => {
       console.log(payload)
     })
