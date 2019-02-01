@@ -12,6 +12,13 @@ const Scheduler = require('./lib/Scheduler')
 const SpeedTracker = require('./lib/SpeedTracker')
 
 const WebhookApi = require('@octokit/webhooks')
+const EventHandler = require('@octokit/webhooks/event-handler')
+const eventHandler = new EventHandler({
+  async transform (event) {
+    // optionally transform passed event before handlers are called
+    return event
+  }
+})
 
 // ------------------------------------
 // Server
@@ -78,7 +85,8 @@ const testHandler = (req, res) => {
     // get details
     console.log('entered inside')
     console.log(webhooks)
-    webhooks.on('pull_request', (id, name, payload) => {
+    eventHandler.on('pull_request', (id, name, payload) => {
+      console.log('recevied pull request')
       console.log(payload)
     })
   }
