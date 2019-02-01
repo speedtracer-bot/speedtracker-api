@@ -12,13 +12,16 @@ const Scheduler = require('./lib/Scheduler')
 const SpeedTracker = require('./lib/SpeedTracker')
 
 const WebhookApi = require('@octokit/webhooks')
-const EventHandler = require('@octokit/webhooks/event-handler')
-const eventHandler = new EventHandler({
-  async transform (event) {
-    // optionally transform passed event before handlers are called
-    return event
-  }
-})
+// const EventHandler = require('@octokit/webhooks/event-handler')
+// const EventSource = require('eventsource')
+
+
+// const eventHandler = new EventHandler({
+//   async transform (event) {
+//     // optionally transform passed event before handlers are called
+//     return event
+//   }
+// })
 
 // ------------------------------------
 // Server
@@ -65,6 +68,28 @@ let db = new Database(connection => {
 // Endpoint: Test
 // ------------------------------------
 
+// const SmeeClient = require('smee-client')
+
+// const smee = new SmeeClient({
+//   source: 'https://smee.io/EVnL2aQsLdOmYl',
+//   target: 'http://localhost:3000/events',
+//   logger: console
+// })
+
+// const events = smee.start()
+
+// const webhookProxyUrl = 'https://smee.io/EVnL2aQsLdOmYl' // replace with your own Webhook Proxy URL
+// const source = new EventSource(webhookProxyUrl)
+// source.onmessage = (event) => {
+//   const webhookEvent = JSON.parse(event.data)
+//   webhooks.verifyAndReceive({
+//     id: webhookEvent['x-request-id'],
+//     name: webhookEvent['x-github-event'],
+//     signature: webhookEvent['x-hub-signature'],
+//     payload: webhookEvent.body
+//   }).catch(console.error)
+// }
+
 const testHandler = (req, res) => {
   // console.log(req)
   const blockList = config.get('blockList').split(',')
@@ -77,21 +102,14 @@ const testHandler = (req, res) => {
   }
   const github = new GitHub(GitHub.GITHUB_CONNECT)
 
-  const webhooks = new WebhookApi({secret: config.get('githubToken')})
-
   github.authenticate(config.get('githubToken'))
-  console.log(req.headers['x-github-event'])
-  eventHandler.on('pull_request', (id, name, payload) => {
-    console.log('recevied pull request')
+
+  const webhooks = new WebhookApi({secret: 'cdfe76a90ece9eb3add341d82ab6479bbf8422b4'})
+  console.log(webhooks)
+  webhooks.on('*', ({id, name, payload}) => {
+    console.log(name, 'event received')
     console.log(payload)
   })
-  if (req.headers['x-github-event'] === 'pull_request') {
-    // get details
-    console.log('entered inside')
-    console.log(webhooks)
-    console.log(eventHandler)
-   
-  }
 
   // const speedtracker = new SpeedTracker({
   //   db,
@@ -112,6 +130,8 @@ const testHandler = (req, res) => {
 
   //   res.status(500).send(JSON.stringify(err))
   // })
+  // Stop forwarding events
+  events.close()
 }
 
 server.get('/v1/test/:user/:repo/:branch/:profile', testHandler)
